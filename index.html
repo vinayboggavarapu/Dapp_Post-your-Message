@@ -57,10 +57,12 @@
         const provider = new ethers.providers.Web3Provider(window.ethereum, "goerli");
         //if you want to use your current network, instead of window.ethereum write web3.currentProvider//
        
+        provider.send("eth_requestAccounts", []).then(() => {
         provider.listAccounts().then((accounts)=>{
             signer=provider.getSigner(accounts[0]);
             messagecontract=new ethers.Contract(contractAddress,contractABI,signer);
-        });
+            });
+        })
          
         async function wrap(){
             const content=document.getElementById("message").value;
