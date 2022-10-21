@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>FirstDApp</title>
+</head>
+<body>
+    <h1 class="heading">WAGMI🚀</h1>
+    <div class="msg">
+        <input type="text" id="message" placeholder="enter message here"></input>
+    </div>
+    <div>
+        <button onclick="wrap()">Give Your Message</button>
+    </div>
+    <div>
+        <button onclick="unwrap()">Your Message</button>
+    </div>
+    <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+    ></script>
+    <script>
+        const contractAddress="0xd7753A76C5be0Ba1902181363d38A776CE60a28E";             //Providing the contract address 
+        const contractABI=[                                                            //Providing the contart ABI
+            {
+                "inputs": [
+                    {
+                        "internalType": "string",
+                        "name": "_message",
+                        "type": "string"
+                    }
+                ],
+                "name": "write",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "read",
+                "outputs": [
+                    {
+                        "internalType": "string",
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]
+        let signer;
+        let messagecontract;
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "goerli");
+        //if you want to use your current network, instead of window.ethereum write web3.currentProvider//
+       
+        provider.listAccounts().then((accounts)=>{
+            signer=provider.getSigner(accounts[0]);
+            messagecontract=new ethers.Contract(contractAddress,contractABI,signer);
+        });
+         
+        async function wrap(){
+            const content=document.getElementById("message").value;
+            const passmsg=messagecontract.write(content);
+            await passmsg;
+
+        }
+        async function unwrap(){
+            const getmsg=messagecontract.read()
+            const printmsg=await getmsg;
+            console.log(printmsg);
+
+        }
+            
+    </script>
+</body>
+</html>
