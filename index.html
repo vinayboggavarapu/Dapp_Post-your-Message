@@ -66,7 +66,7 @@
          
         async function wrap(){
             const content=document.getElementById("message").value;
-            const passmsg=messagecontract.write(content);
+            const passmsg=messagecontract.write(content); //DONT USE WRITE AND READ AS FUNCTION NAMES TOOK THEM FOR EASY UNDERSTANDING
             await passmsg;
 
         }
